@@ -211,13 +211,22 @@ function getSliderSpeed() {
     return 0;
 }
 
-function gameEntryPoint() {
+function start() {
     // noinspection JSValidateTypes
     /**
      * @type {HTMLCanvasElement}
      */
     const canvas = $('#game-canvas');
     const game = new GEG(canvas);
+
+    // Register keyboard up to a body
+    (() => {
+        let current = canvas.parentElement;
+        while (current.tagName !== 'BODY') {
+            current = current.parentElement;
+            game.registerKeyboard(current);
+        }
+    })();
 
     music = new GSongLib();
     score = new GScore();
@@ -261,4 +270,5 @@ function gameEntryPoint() {
     game.run();
 }
 
-window.onload = gameEntryPoint;
+(() => start())();
+
